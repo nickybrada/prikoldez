@@ -16,11 +16,11 @@
             align-items: center;
             position: relative;
         }
-        img {
+        video {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            display: none; /* Hide the GIF initially */
+            display: none; /* Hide the video initially */
         }
         #fullscreen-btn {
             position: absolute;
@@ -36,13 +36,14 @@
 </head>
 <body>
     <button id="fullscreen-btn">Start</button>
-    <img src="your-gif.gif" alt="Autoplay GIF" id="gif">
-    <audio id="audio" src="music.mp3" preload="auto"></audio>
+    <video id="video" controls>
+        <source src="https://cdn.discordapp.com/attachments/1226691485420748820/1312819995675197590/video_2024-12-01_19-37-18.mp4?ex=674de265&is=674c90e5&hm=39d52a862b786c7e718bc23d48c8986057e609b396c95834f20b99a47566f368" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
 
     <script>
         const btn = document.getElementById('fullscreen-btn');
-        const gif = document.getElementById('gif');
-        const audio = document.getElementById('audio');
+        const video = document.getElementById('video');
 
         btn.addEventListener('click', () => {
             const elem = document.documentElement;
@@ -56,9 +57,28 @@
                 elem.msRequestFullscreen();
             }
 
-            // Show the GIF and play the audio
-            gif.style.display = 'block';
-            audio.play();
+            // Show the video and play it after entering fullscreen
+            video.style.display = 'block';
+            video.play(); // Start playing the video
+        });
+
+        // Optional: Add an event listener to play the video when it enters fullscreen
+        document.addEventListener('fullscreenchange', () => {
+            if (document.fullscreenElement) {
+                video.play(); // Play the video when entering fullscreen
+            } else {
+                video.pause(); // Pause the video when exiting fullscreen
+                const elem = document.documentElement;
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.mozRequestFullScreen) { // Firefox
+                    elem.mozRequestFullScreen();
+                } else if (elem.webkitRequestFullscreen) { // Chrome, Safari, and Opera
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) { // IE/Edge
+                    elem.msRequestFullscreen();
+                }
+            }
         });
     </script>
 </body>
