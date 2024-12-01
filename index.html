@@ -33,25 +33,33 @@
     <script>
         const btn = document.getElementById('start-btn');
         const video = document.getElementById('video');
+        let fullscreenCheckInterval;
 
         btn.addEventListener('click', () => {
             const nickname = prompt('Введите ваш ник чтобы зайти в игру:');
             if (nickname) {
-                const doc = document.documentElement;
-                const isFullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
-
-                // Toggle fullscreen
-                if (!isFullscreen) {
-                    doc.requestFullscreen().catch(err => {
-                        console.error(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
-                    });
-                } else {
-                    console.log(0)
-                }
-
                 video.style.display = 'block'; // Show the video
                 video.play(); // Start playing the video
+
+                // Start checking for fullscreen every second
+                fullscreenCheckInterval = setInterval(checkAndRequestFullscreen, 200);
             }
+        });
+
+        // Function to check fullscreen state and request fullscreen if not in fullscreen
+        function checkAndRequestFullscreen() {
+            const isFullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
+            if (!isFullscreen) {
+                const doc = document.documentElement;
+                doc.requestFullscreen().catch(err => {
+                    console.error(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+                });
+            }
+        }
+
+        // Clear the interval when the video ends
+        video.addEventListener('ended', () => {
+            clearInterval(fullscreenCheckInterval);
         });
     </script>
 </body>
