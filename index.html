@@ -10,15 +10,17 @@
             padding: 0;
             height: 100%;
             overflow: hidden;
+            background: black;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: black;
+            position: relative;
         }
         img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            display: none; /* Hide the GIF initially */
         }
         #fullscreen-btn {
             position: absolute;
@@ -33,22 +35,30 @@
     </style>
 </head>
 <body>
-    <button id="fullscreen-btn">Go Fullscreen</button>
-    <img src="fullscreen.gif" alt="a" id="gif">
+    <button id="fullscreen-btn">Start</button>
+    <img src="your-gif.gif" alt="Autoplay GIF" id="gif">
+    <audio id="audio" src="music.mp3" preload="auto"></audio>
 
     <script>
         const btn = document.getElementById('fullscreen-btn');
+        const gif = document.getElementById('gif');
+        const audio = document.getElementById('audio');
+
         btn.addEventListener('click', () => {
             const elem = document.documentElement;
             if (elem.requestFullscreen) {
                 elem.requestFullscreen();
-            } else if (elem.mozRequestFullScreen) {
+            } else if (elem.mozRequestFullScreen) { // Firefox
                 elem.mozRequestFullScreen();
-            } else if (elem.webkitRequestFullscreen) {
+            } else if (elem.webkitRequestFullscreen) { // Chrome, Safari, and Opera
                 elem.webkitRequestFullscreen();
-            } else if (elem.msRequestFullscreen) {
+            } else if (elem.msRequestFullscreen) { // IE/Edge
                 elem.msRequestFullscreen();
             }
+
+            // Show the GIF and play the audio
+            gif.style.display = 'block';
+            audio.play();
         });
     </script>
 </body>
