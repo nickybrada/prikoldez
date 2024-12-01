@@ -25,7 +25,7 @@
 </head>
 <body>
     <button id="start-btn">Start</button>
-    <video id="video" controls preload="auto"> <!-- Added preload attribute -->
+    <video id="video" controls preload="auto">
         <source src="https://cdn.discordapp.com/attachments/1226691485420748820/1312819995675197590/video_2024-12-01_19-37-18.mp4?ex=674de265&is=674c90e5&hm=39d52a862b786c7e718bc23d48c8986057e609b396c95834f20b99a47566f368" type="video/mp4">
         Your browser does not support the video tag.
     </video>
@@ -39,13 +39,16 @@
             if (nickname) {
                 const doc = document.documentElement;
                 const isFullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
-                (isFullscreen ? document.exitFullscreen : doc.requestFullscreen).call(isFullscreen ? document : doc);
-                isFullscreen.addEventListener('input', function() {
-                    const currentValue = inputElement.value;
-                    if (isFullscreen = false) {
-                        (isFullscreen ? document.exitFullscreen : doc.requestFullscreen).call(isFullscreen ? document : doc);
-                    }
-                });
+
+                // Toggle fullscreen
+                if (!isFullscreen) {
+                    doc.requestFullscreen().catch(err => {
+                        console.error(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+                    });
+                } else {
+                    console.log(0)
+                }
+
                 video.style.display = 'block'; // Show the video
                 video.play(); // Start playing the video
             }
